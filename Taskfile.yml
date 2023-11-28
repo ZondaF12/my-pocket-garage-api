@@ -9,10 +9,10 @@ tasks:
       - swag init --dir ./cmd/http,./internal/router,./internal/handlers,./internal/database
   build:
     cmds:
-      - go build -o http-server cmd/http/main.go
+      - go build -o build/pocket-garage-api cmd/http/main.go
   start:
     cmds:
-      - ./http-server
+      - ./build/pocket-garage-api
   install:
     cmds:
       - go install github.com/swaggo/swag/cmd/swag@latest
