@@ -20,5 +20,5 @@ RUN task docs
 
 # ENV GO_ENV=production
 
-CMD ["go", "run" "cmd/http/main.go"]
+CMD ["go", "run", "cmd/http/main.go"]
 
