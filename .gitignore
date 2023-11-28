@@ -1,0 +1,5 @@
+app.env
+
+tmp
+docs
+go.sum
