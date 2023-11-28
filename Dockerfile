@@ -1,6 +1,6 @@
 FROM golang:1.19.5-alpine as builder
 
-WORKDIR /build
+WORKDIR /
 
 COPY go.mod go.sum ./
 RUN go mod download
@@ -16,9 +16,9 @@ RUN task build
 
 FROM scratch
 
-COPY --from=builder ["/build/pocket-garage-api", "/pocket-garage-api"]
+COPY --from=builder ["/build/pocket-garage-api", "/build/pocket-garage-api"]
 
 ENV GO_ENV=production
 
-CMD ["/pocket-garage-api"]
+CMD ["./build/pocket-garage-api"]
 

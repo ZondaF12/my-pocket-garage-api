@@ -23,7 +23,6 @@ func SetupAndRunApp() (func(), error) {
 	// start database
 	err = database.StartMongoDB(env.MONGODB_URI, env.DATABASE)
 	if err != nil {
-		fmt.Println("foo")
 		return nil, err
 	}
 
