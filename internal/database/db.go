@@ -63,10 +63,13 @@ type UserVehicle struct {
 }
 
 type Activity struct {
-	UserID       string `json:"userId" bson:"userId"`
-	Registration string `json:"registration" bson:"registration"`
-	Title        string `json:"title" bson:"title"`
-	Date         string `json:"date" bson:"date"`
+	UserID        string  `json:"userId" bson:"userId"`
+	Registration  string  `json:"registration" bson:"registration"`
+	Title         string  `json:"title" bson:"title"`
+	Date          string  `json:"date" bson:"date"`
+	Cost          string `json:"cost" bson:"cost"`
+	ServiceCentre string  `json:"serviceCentre" bson:"serviceCentre"`
+	Notes         string  `json:"notes" bson:"notes"`
 }
 
 func AddUserVehicle(userId string, registration string) error {
@@ -129,4 +132,24 @@ func GetUserVehicles(userId string) ([]UserVehicle, error) {
 	}
 
 	return res, err
+}
+
+func AddVehicleActivity(arr Activity) error {
+	actColl := GetDBCollection("Activity")
+	_, err := actColl.InsertOne(context.Background(), arr)
+	if err != nil {
+		return err
+	}
+
+	uvColl := GetDBCollection("User Vehicles")
+	filter := bson.D{{Key: "userId", Value: arr.UserID}, {Key: "registration", Value: arr.Registration}}
+	update := bson.M{"$push": bson.M{"activity": arr}}
+
+	var updatedDoc Activity
+	err = uvColl.FindOneAndUpdate(context.Background(), filter, update).Decode(&updatedDoc)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

@@ -5,6 +5,7 @@ import (
 	_ "github.com/ZondaF12/my-pocket-garage/docs"
 	"github.com/ZondaF12/my-pocket-garage/internal/auth"
 	"github.com/ZondaF12/my-pocket-garage/internal/handlers"
+	"github.com/ZondaF12/my-pocket-garage/internal/handlers/activity"
 	"github.com/ZondaF12/my-pocket-garage/internal/handlers/vehicle"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/swagger"
@@ -28,8 +29,9 @@ func SetupRoutes(app *fiber.App, config config.EnvVars) {
 	// middleware to protect routes
 	apiGroup.Use(authMiddleware.ValidateToken)
 	// auth routes
-	apiGroup.Get("/vehicle/info/:vehicleReg", vehicle.HandleVehicleInfo)
-	apiGroup.Get("/vehicle/mot/:vehicleReg", vehicle.HandleVehicleMotData)
+	apiGroup.Get("/vehicle/:vehicleReg/info", vehicle.HandleVehicleInfo)
+	apiGroup.Get("/vehicle/:vehicleReg/mot", vehicle.HandleVehicleMotData)
+	apiGroup.Post("/user/:userId/vehicles/:vehicleReg/activity", activity.HandleAddVehicleActivity)
 	apiGroup.Post("/user/:userId/vehicles", vehicle.HandleAddUserVehicle)
 	apiGroup.Get("/user/:userId/vehicles", vehicle.HandleGetUserVehicles)
 }
