@@ -163,3 +163,16 @@ func AddVehicleActivity(arr Activity) error {
 
 	return nil
 }
+
+func GetActiveVehicle(userId string) (UserVehicle, error) {
+	coll := GetDBCollection("User Vehicles")
+	filter := bson.D{{Key: "userId", Value: userId}, {Key: "active", Value: true}}
+
+	var active UserVehicle
+	err := coll.FindOne(context.Background(), filter).Decode(&active)
+	if err != nil {
+		return UserVehicle{}, err
+	}
+
+	return active, err
+}

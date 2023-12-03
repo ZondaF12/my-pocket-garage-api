@@ -75,3 +75,30 @@ func HandleGetUserVehicles(c *fiber.Ctx) error {
 		"message": res,
 	})
 }
+
+// @Summary Get the current active vehicle of a user.
+// @Description get the active vehicle of a user.
+// @Tags User Vehicles
+// @Accept */*
+// @Produce plain
+// @Success 200 {object} database.UserVehicle
+// @Router /api/user/:userId/activevehicle [get]
+func HandleGetActiveUserVehicle(c *fiber.Ctx) error {
+	userId, err := url.QueryUnescape(c.Params("userId"))
+	if err != nil {
+		return c.Status(http.StatusForbidden).JSON(fiber.Map{
+			"error": fmt.Sprint(err),
+		})
+	}
+
+	res, err := database.GetActiveVehicle(userId)
+	if err != nil {
+		return c.Status(http.StatusForbidden).JSON(fiber.Map{
+			"error": fmt.Sprint(err),
+		})
+	}
+
+	return c.Status(http.StatusOK).JSON(fiber.Map{
+		"message": res,
+	})
+}
