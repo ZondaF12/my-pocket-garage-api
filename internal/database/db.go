@@ -55,6 +55,9 @@ type UserVehicle struct {
 	Make          string     `json:"make" bson:"make"`
 	Model         string     `json:"model" bson:"model"`
 	Year          int        `json:"year" bson:"year"`
+	EngineSize    int        `json:"engineSize" bson:"engineSize"`
+	Color         string     `json:"color" bson:"color"`
+	Registered    string     `json:"registered" bson:"registered"`
 	TaxDate       string     `json:"taxDate" bson:"taxDate"`
 	MotDate       string     `json:"motDate" bson:"motDate"`
 	InsuranceDate string     `json:"insuranceDate" bson:"insuranceDate"`
@@ -63,13 +66,13 @@ type UserVehicle struct {
 }
 
 type Activity struct {
-	UserID        string  `json:"userId" bson:"userId"`
-	Registration  string  `json:"registration" bson:"registration"`
-	Title         string  `json:"title" bson:"title"`
-	Date          string  `json:"date" bson:"date"`
+	UserID        string `json:"userId" bson:"userId"`
+	Registration  string `json:"registration" bson:"registration"`
+	Title         string `json:"title" bson:"title"`
+	Date          string `json:"date" bson:"date"`
 	Cost          string `json:"cost" bson:"cost"`
-	ServiceCentre string  `json:"serviceCentre" bson:"serviceCentre"`
-	Notes         string  `json:"notes" bson:"notes"`
+	ServiceCentre string `json:"serviceCentre" bson:"serviceCentre"`
+	Notes         string `json:"notes" bson:"notes"`
 }
 
 func AddUserVehicle(userId string, registration string) error {
@@ -89,7 +92,7 @@ func AddUserVehicle(userId string, registration string) error {
 	}
 
 	// validate the body
-	newUserVehicle := UserVehicle{UserID: userId, Registration: registration, Make: res.Make, Model: motRes[0].Model, Year: res.YearOfManufacture, TaxDate: res.TaxDueDate, MotDate: res.MotExpiryDate, InsuranceDate: "", ServiceDate: "", Activity: []Activity{}}
+	newUserVehicle := UserVehicle{UserID: userId, Registration: registration, Make: res.Make, Model: motRes[0].Model, Year: res.YearOfManufacture, EngineSize: res.EngineCapacity, Color: res.Colour, Registered: motRes[0].FirstUsedDate, TaxDate: res.TaxDueDate, MotDate: res.MotExpiryDate, InsuranceDate: "", ServiceDate: "", Activity: []Activity{}}
 
 	// create the price alert
 	coll := GetDBCollection("User Vehicles")
