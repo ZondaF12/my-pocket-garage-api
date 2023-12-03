@@ -51,6 +51,7 @@ func CloseMongoDB() {
 
 type UserVehicle struct {
 	UserID        string     `json:"userId" bson:"userId"`
+	Active        bool       `json:"active" bson:"active"`
 	Registration  string     `json:"registration" bson:"registration"`
 	Make          string     `json:"make" bson:"make"`
 	Model         string     `json:"model" bson:"model"`
