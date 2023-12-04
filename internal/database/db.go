@@ -99,7 +99,7 @@ func AddUserVehicle(userId string, registration string) error {
 	setActive := userVehicles == nil
 
 	// validate the body
-	newUserVehicle := UserVehicle{UserID: userId, Active: setActive, Registration: registration, Make: res.Make, Model: motRes[0].Model, Year: res.YearOfManufacture, EngineSize: res.EngineCapacity, Color: res.Colour, Registered: motRes[0].FirstUsedDate, TaxDate: res.TaxDueDate, MotDate: res.MotExpiryDate, InsuranceDate: "", ServiceDate: "", Activity: []Activity{}}
+	newUserVehicle := UserVehicle{UserID: userId, Active: setActive, Registration: registration, Make: res.Make, Model: motRes[0].Model, Year: res.YearOfManufacture, EngineSize: res.EngineCapacity, Color: motRes[0].PrimaryColour, Registered: motRes[0].FirstUsedDate, TaxDate: res.TaxDueDate, MotDate: res.MotExpiryDate, InsuranceDate: "", ServiceDate: "", Activity: []Activity{}}
 
 	// create the price alert
 	coll := GetDBCollection("User Vehicles")
