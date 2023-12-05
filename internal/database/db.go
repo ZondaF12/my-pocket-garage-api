@@ -176,3 +176,25 @@ func GetActiveVehicle(userId string) (UserVehicle, error) {
 
 	return active, err
 }
+
+func SetActiveVehicle(userId string, registration string) error {
+	coll := GetDBCollection("User Vehicles")
+	filter := bson.D{{Key: "userId", Value: userId}, {Key: "active", Value: true}}
+	update := bson.D{{Key: "$set", Value: bson.D{{Key: "active", Value: false}}}}
+
+	_, err := coll.UpdateMany(context.Background(), filter, update)
+	if err != nil {
+		return err
+	}
+
+	filter = bson.D{{Key: "userId", Value: userId}, {Key: "registration", Value: registration}}
+	update = bson.D{{Key: "$set", Value: bson.D{{Key: "active", Value: true}}}}
+
+	var updatedDoc Activity
+	err = coll.FindOneAndUpdate(context.Background(), filter, update).Decode(&updatedDoc)
+	if err != nil {
+		return err
+	}
+
+	return err
+}

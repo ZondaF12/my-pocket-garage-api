@@ -102,3 +102,38 @@ func HandleGetActiveUserVehicle(c *fiber.Ctx) error {
 		"message": res,
 	})
 }
+
+// @Summary Set the current active vehicle of a user.
+// @Description set the active vehicle of a user.
+// @Tags User Vehicles
+// @Accept */*
+// @Produce plain
+// @Success 200 "Active Vehicle Set"
+// @Router /api/user/:userId/activevehicle [post]
+func HandleSetActiveUserVehicle(c *fiber.Ctx) error {
+	payload := AddVehicleBody{}
+
+	if err := c.BodyParser(&payload); err != nil {
+		return c.Status(http.StatusForbidden).JSON(fiber.Map{
+			"error": err,
+		})
+	}
+	
+	userId, err := url.QueryUnescape(c.Params("userId"))
+	if err != nil {
+		return c.Status(http.StatusForbidden).JSON(fiber.Map{
+			"error": fmt.Sprint(err),
+		})
+	}
+
+	err = database.SetActiveVehicle(userId, payload.Registration)
+	if err != nil {
+		return c.Status(http.StatusForbidden).JSON(fiber.Map{
+			"error": fmt.Sprint(err),
+		})
+	}
+
+	return c.Status(http.StatusOK).JSON(fiber.Map{
+		"message": "Active Vehicle Set",
+	})
+}
