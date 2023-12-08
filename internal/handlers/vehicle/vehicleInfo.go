@@ -13,7 +13,7 @@ import (
 // @Accept */*
 // @Produce plain
 // @Success 200 {object} tools.VehicleData
-// @Router /api/vehicle/info/:vehicleReg [get]
+// @Router /api/vehicle/:vehicleReg/info [get]
 func HandleVehicleInfo(c *fiber.Ctx) error {
 	res, err := tools.DoVehicleInfoRequest(c.Params("vehicleReg"))
 	if err != nil {
