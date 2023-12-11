@@ -137,3 +137,45 @@ func HandleSetActiveUserVehicle(c *fiber.Ctx) error {
 		"message": "Active Vehicle Set",
 	})
 }
+
+// @Summary Update the details of a specific vehicle.
+// @Description Update the details of a specific vehicle.
+// @Tags User Vehicles
+// @Accept */*
+// @Produce plain
+// @Success 200 "Vehicle Updated"
+// @Router /api/user/:userId/vehicles/:registration [put]
+func HandleUpdateUserVehicle(c *fiber.Ctx) error {
+	payload := database.UserVehicleUpdate{}
+
+	if err := c.BodyParser(&payload); err != nil {
+		return c.Status(http.StatusForbidden).JSON(fiber.Map{
+			"error": err,
+		})
+	}
+	
+	userId, err := url.QueryUnescape(c.Params("userId"))
+	if err != nil {
+		return c.Status(http.StatusForbidden).JSON(fiber.Map{
+			"error": fmt.Sprint(err),
+		})
+	}
+
+	registration, err := url.QueryUnescape(c.Params("registration"))
+	if err != nil {
+		return c.Status(http.StatusForbidden).JSON(fiber.Map{
+			"error": fmt.Sprint(err),
+		})
+	}
+
+	err = database.UpdateUserVehicle(userId, registration, payload)
+	if err != nil {
+		return c.Status(http.StatusForbidden).JSON(fiber.Map{
+			"error": fmt.Sprint(err),
+		})
+	}
+
+	return c.Status(http.StatusOK).JSON(fiber.Map{
+		"message": "Vehicle Updated",
+	})
+}

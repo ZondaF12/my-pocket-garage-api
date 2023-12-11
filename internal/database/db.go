@@ -66,6 +66,23 @@ type UserVehicle struct {
 	Activity      []Activity `json:"activity" bson:"activity"`
 }
 
+type UserVehicleUpdate struct {
+	UserID        string     `json:"userId,omitempty" bson:"userId,omitempty"`
+	Active        bool       `json:"active,omitempty" bson:"active,omitempty"`
+	Registration  string     `json:"registration,omitempty" bson:"registration,omitempty"`
+	Make          string     `json:"make,omitempty" bson:"make,omitempty"`
+	Model         string     `json:"model,omitempty" bson:"model,omitempty"`
+	Year          int        `json:"year,omitempty" bson:"year,omitempty"`
+	EngineSize    int        `json:"engineSize,omitempty" bson:"engineSize,omitempty"`
+	Color         string     `json:"color,omitempty" bson:"color,omitempty"`
+	Registered    string     `json:"registered,omitempty" bson:"registered,omitempty"`
+	TaxDate       string     `json:"taxDate,omitempty" bson:"taxDate,omitempty"`
+	MotDate       string     `json:"motDate,omitempty" bson:"motDate,omitempty"`
+	InsuranceDate string     `json:"insuranceDate,omitempty" bson:"insuranceDate,omitempty"`
+	ServiceDate   string     `json:"serviceDate,omitempty" bson:"serviceDate,omitempty"`
+	Activity      []Activity `json:"activity,omitempty" bson:"activity,omitempty"`
+}
+
 type Activity struct {
 	UserID        string `json:"userId" bson:"userId"`
 	Registration  string `json:"registration" bson:"registration"`
@@ -199,6 +216,19 @@ func SetActiveVehicle(userId string, registration string) error {
 
 	var updatedDoc Activity
 	err = coll.FindOneAndUpdate(context.Background(), filter, update).Decode(&updatedDoc)
+	if err != nil {
+		return err
+	}
+
+	return err
+}
+
+func UpdateUserVehicle(userId string, registration string, updateA UserVehicleUpdate) error {
+	coll := GetDBCollection("User Vehicles")
+	filter := bson.D{{Key: "userId", Value: userId}, {Key: "active", Value: true}}
+	update := bson.D{{Key: "$set", Value: updateA}}
+
+	_, err := coll.UpdateMany(context.Background(), filter, update)
 	if err != nil {
 		return err
 	}
