@@ -78,7 +78,7 @@ func HandleGetUserVehicles(c *fiber.Ctx) error {
 
 // @Summary Get the current active vehicle of a user.
 // @Description get the active vehicle of a user.
-// @Tags User Vehicles
+// @Tags Active Vehicle
 // @Accept */*
 // @Produce plain
 // @Success 200 {object} database.UserVehicle
@@ -105,7 +105,7 @@ func HandleGetActiveUserVehicle(c *fiber.Ctx) error {
 
 // @Summary Set the current active vehicle of a user.
 // @Description set the active vehicle of a user.
-// @Tags User Vehicles
+// @Tags Active Vehicle
 // @Accept */*
 // @Produce plain
 // @Success 200 "Active Vehicle Set"
@@ -140,7 +140,7 @@ func HandleSetActiveUserVehicle(c *fiber.Ctx) error {
 
 // @Summary Update the details of a specific vehicle.
 // @Description Update the details of a specific vehicle.
-// @Tags User Vehicles
+// @Tags User Vehicle
 // @Accept */*
 // @Produce plain
 // @Success 200 "Vehicle Updated"
@@ -177,5 +177,39 @@ func HandleUpdateUserVehicle(c *fiber.Ctx) error {
 
 	return c.Status(http.StatusOK).JSON(fiber.Map{
 		"message": "Vehicle Updated",
+	})
+}
+
+// @Summary Delete a specific vehicle.
+// @Description Delete a specific vehicle.
+// @Tags User Vehicle
+// @Accept */*
+// @Produce plain
+// @Success 200 "Vehicle Deleted"
+// @Router /api/user/:userId/vehicles/:registration [delete]
+func HandleDeleteUserVehicle(c *fiber.Ctx) error {
+	userId, err := url.QueryUnescape(c.Params("userId"))
+	if err != nil {
+		return c.Status(http.StatusForbidden).JSON(fiber.Map{
+			"error": fmt.Sprint(err),
+		})
+	}
+
+	registration, err := url.QueryUnescape(c.Params("registration"))
+	if err != nil {
+		return c.Status(http.StatusForbidden).JSON(fiber.Map{
+			"error": fmt.Sprint(err),
+		})
+	}
+
+	err = database.DeleteUserVehicle(userId, registration)
+	if err != nil {
+		return c.Status(http.StatusForbidden).JSON(fiber.Map{
+			"error": fmt.Sprint(err),
+		})
+	}
+
+	return c.Status(http.StatusOK).JSON(fiber.Map{
+		"message": "Vehicle Deleted",
 	})
 }

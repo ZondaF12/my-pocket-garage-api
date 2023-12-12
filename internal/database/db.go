@@ -235,3 +235,15 @@ func UpdateUserVehicle(userId string, registration string, updateA UserVehicleUp
 
 	return err
 }
+
+func DeleteUserVehicle(userId string, registration string) error {
+	coll := GetDBCollection("User Vehicles")
+	filter := bson.D{{Key: "userId", Value: userId}, {Key: "registration", Value: registration}}
+
+	_, err := coll.DeleteOne(context.Background(), filter)
+	if err != nil {
+		return err
+	}
+
+	return err
+}
