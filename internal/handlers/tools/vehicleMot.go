@@ -11,13 +11,14 @@ import (
 )
 
 type MotData []struct {
-	Registration  string     `json:"registration"`
-	Make          string     `json:"make"`
-	Model         string     `json:"model"`
-	FirstUsedDate string     `json:"firstUsedDate"`
-	FuelType      string     `json:"fuelType"`
-	PrimaryColour string     `json:"primaryColour"`
-	MotTests      []MotTests `json:"motTests"`
+	Registration      string     `json:"registration"`
+	Make              string     `json:"make"`
+	Model             string     `json:"model"`
+	FirstUsedDate     string     `json:"firstUsedDate"`
+	FuelType          string     `json:"fuelType"`
+	PrimaryColour     string     `json:"primaryColour"`
+	MotTestExpiryDate string     `json:"MotTestExpiryDate"`
+	MotTests          []MotTests `json:"motTests"`
 }
 
 type MotTests struct {
@@ -30,7 +31,7 @@ type MotTests struct {
 	RfrAndComments []any  `json:"rfrAndComments"`
 }
 
-func DoVehicleMotRequest(registration string) (MotData, error){
+func DoVehicleMotRequest(registration string) (MotData, error) {
 	env, err := config.LoadConfig()
 	if err != nil {
 		return MotData{}, err

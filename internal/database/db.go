@@ -3,6 +3,8 @@ package database
 import (
 	"context"
 	"errors"
+	"fmt"
+	"time"
 
 	"github.com/ZondaF12/my-pocket-garage/internal/handlers/tools"
 	"go.mongodb.org/mongo-driver/bson"
@@ -122,8 +124,27 @@ func AddUserVehicle(userId string, registration string) error {
 		taxDate = res.TaxStatus
 	}
 
+	var motDate string
+	if res.MotExpiryDate != "" {
+		motDate = res.MotExpiryDate
+	} else {
+		motDate = motRes[0].MotTestExpiryDate
+	}
+
+	var registeredDate string
+	if motRes[0].FirstUsedDate != "" {
+		registeredDate = motRes[0].FirstUsedDate
+	} else {
+		date, err := time.Parse("2006-01-02", motDate)
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		registeredDate = date.AddDate(-3, 0, 1).Format("2006-01-02")
+	}
+
 	// validate the body
-	newUserVehicle := UserVehicle{UserID: userId, Active: setActive, Registration: registration, Make: res.Make, Model: motRes[0].Model, Year: res.YearOfManufacture, EngineSize: res.EngineCapacity, Color: motRes[0].PrimaryColour, Registered: motRes[0].FirstUsedDate, TaxDate: taxDate, MotDate: res.MotExpiryDate, InsuranceDate: "", ServiceDate: "", Activity: []Activity{}}
+	newUserVehicle := UserVehicle{UserID: userId, Active: setActive, Registration: registration, Make: res.Make, Model: motRes[0].Model, Year: res.YearOfManufacture, EngineSize: res.EngineCapacity, Color: motRes[0].PrimaryColour, Registered: registeredDate, TaxDate: taxDate, MotDate: motDate, InsuranceDate: "", ServiceDate: "", Activity: []Activity{}}
 
 	// create the price alert
 	coll := GetDBCollection("User Vehicles")
