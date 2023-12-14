@@ -88,11 +88,12 @@ type UserVehicleUpdate struct {
 type Activity struct {
 	UserID        string `json:"userId" bson:"userId"`
 	Registration  string `json:"registration" bson:"registration"`
-	Title         string `json:"title" bson:"title"`
+	Type          string `json:"type" bson:"type"`
 	Date          string `json:"date" bson:"date"`
+	Title         string `json:"title" bson:"title"`
+	Description   string `json:"description" bson:"description"`
 	Cost          string `json:"cost" bson:"cost"`
 	ServiceCentre string `json:"serviceCentre" bson:"serviceCentre"`
-	Notes         string `json:"notes" bson:"notes"`
 }
 
 func AddUserVehicle(userId string, registration string) error {
