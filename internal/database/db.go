@@ -93,6 +93,7 @@ type Activity struct {
 	Title         string `json:"title" bson:"title"`
 	Description   string `json:"description" bson:"description"`
 	Cost          string `json:"cost" bson:"cost"`
+	Mileage       string `json:"mileage" bson:"mileage"`
 	ServiceCentre string `json:"serviceCentre" bson:"serviceCentre"`
 }
 
@@ -268,4 +269,27 @@ func DeleteUserVehicle(userId string, registration string) error {
 	}
 
 	return err
+}
+
+func GetUserVehicleHistory(userId string) ([]Activity, error) {
+	coll := GetDBCollection("Activity")
+	filter := bson.D{{Key: "userId", Value: userId}}
+
+	cur, err := coll.Find(context.Background(), filter)
+	if err != nil {
+		return []Activity{}, err
+	}
+
+	var res []Activity
+	for cur.Next(context.Background()) {
+		//Create a value into which the single document can be decoded
+		var elem Activity
+		err := cur.Decode(&elem)
+		if err != nil {
+			return []Activity{}, err
+		}
+		res = append(res, elem)
+	}
+
+	return res, err
 }

@@ -38,4 +38,5 @@ func SetupRoutes(app *fiber.App, config config.EnvVars) {
 	apiGroup.Get("/user/:userId/vehicles", vehicle.HandleGetUserVehicles)
 	apiGroup.Get("/user/:userId/activevehicle", vehicle.HandleGetActiveUserVehicle)
 	apiGroup.Post("/user/:userId/activevehicle", vehicle.HandleSetActiveUserVehicle)
+	apiGroup.Get("/user/:userId/vehicleHistory", vehicle.HandlerGetUserVehicleHistory)
 }
